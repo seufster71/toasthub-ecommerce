@@ -30,12 +30,12 @@ import org.toasthub.core.general.model.GlobalConstant;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
+import org.toasthub.ecommerce.member.MemberDao;
 import org.toasthub.ecommerce.model.AttachmentMeta;
 import org.toasthub.ecommerce.model.CartItem;
 import org.toasthub.ecommerce.model.ECConstant;
-import org.toasthub.ecommerce.model.UserRef;
+import org.toasthub.ecommerce.model.Member;
 import org.toasthub.ecommerce.store.StoreDao;
-import org.toasthub.ecommerce.userRef.UserRefDao;
 import org.toasthub.security.model.MyUserPrincipal;
 import org.toasthub.security.model.User;
 
@@ -53,7 +53,7 @@ public class CartSvcImpl implements CartSvc {
 	
 	@Autowired
 	@Qualifier("ECUserRefDao")
-	UserRefDao userRefDao;
+	MemberDao userRefDao;
 	
 	@Autowired
 	UtilSvc utilSvc;
@@ -139,8 +139,8 @@ public class CartSvcImpl implements CartSvc {
 	public void itemCount(RestRequest request, RestResponse response) {
 		try {
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			UserRef userRef = userRefDao.getUserRef(user);
-			request.addParam(ECConstant.USERREF, userRef);
+			Member member = userRefDao.getMember(user);
+			request.addParam(ECConstant.MEMBER, member);
 			cartDao.itemCount(request, response);
 		} catch (Exception e) {
 			utilSvc.addStatus(RestResponse.ERROR, RestResponse.EXECUTIONFAILED, prefCacheUtil.getPrefText("GLOBAL_SERVICE", "GLOBAL_SERVICE_EXECUTION_FAIL",prefCacheUtil.getLang(request)), response);
@@ -162,8 +162,8 @@ public class CartSvcImpl implements CartSvc {
 	public void items(RestRequest request, RestResponse response) {
 		try {
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			UserRef userRef = userRefDao.getUserRef(user);
-			request.addParam(ECConstant.USERREF, userRef);
+			Member member = userRefDao.getMember(user);
+			request.addParam(ECConstant.MEMBER, member);
 		
 			cartDao.items(request, response);
 			// check for available quantity
@@ -193,8 +193,8 @@ public class CartSvcImpl implements CartSvc {
 				return;
 			}
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			UserRef userRef = userRefDao.getUserRef(user);
-			request.addParam(ECConstant.USERREF, userRef);
+			Member member = userRefDao.getMember(user);
+			request.addParam(ECConstant.MEMBER, member);
 			
 			// get existing item
 			Map<String,Object> inputList = (Map<String, Object>) request.getParam(GlobalConstant.INPUTFIELDS);

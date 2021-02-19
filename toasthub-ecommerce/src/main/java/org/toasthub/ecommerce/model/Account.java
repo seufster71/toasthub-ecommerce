@@ -22,7 +22,7 @@ public class Account extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected UserRef user;
+	protected Member user;
 	protected BigDecimal balance;
 	protected String type;
 	protected BigDecimal balanceCryptoCurrency;
@@ -33,12 +33,12 @@ public class Account extends BaseEntity implements Serializable {
 	
 	// Setters/Getters
 	@JsonIgnore
-	@ManyToOne(targetEntity = UserRef.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Member.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_ref_id") 
-	public UserRef getUser() {
+	public Member getUser() {
 		return user;
 	}
-	public void setUser(UserRef user) {
+	public void setUser(Member user) {
 		this.user = user;
 	}
 	

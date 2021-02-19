@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.userRef;
+package org.toasthub.ecommerce.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.toasthub.core.common.EntityManagerDataSvc;
 import org.toasthub.core.common.UtilSvc;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.model.UserRef;
+import org.toasthub.ecommerce.model.Member;
 import org.toasthub.security.model.User;
 
-@Repository("ECUserRefDao")
+@Repository("ECMemberDao")
 @Transactional("TransactionManagerData")
-public class UserRefDaoImpl implements UserRefDao {
+public class MemberDaoImpl implements MemberDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
@@ -35,13 +35,11 @@ public class UserRefDaoImpl implements UserRefDao {
 	protected UtilSvc utilSvc;
 	@Autowired
 	PrefCacheUtil prefCacheUtil;
-	
-	
-	
+
 	@Override
-	public UserRef getUserRef(User user) throws Exception {
+	public Member getMember(User user) throws Exception {
 		String HQLQuery = "SELECT x FROM UserRef AS x WHERE x.userRefId =: id ";
-		return (UserRef) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", user.getId()).getSingleResult();
+		return (Member) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", user.getId()).getSingleResult();
 	}
 
 }

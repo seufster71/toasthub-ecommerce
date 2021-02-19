@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.userRef;
+package org.toasthub.ecommerce.member;
 
-import org.toasthub.ecommerce.model.UserRef;
+import org.toasthub.ecommerce.model.Member;
 import org.toasthub.security.model.User;
 
-public interface UserRefDao {
+public interface MemberDao {
 	
-    public UserRef getUserRef(User user) throws Exception;
+    public Member getMember(User user) throws Exception;
 
 }

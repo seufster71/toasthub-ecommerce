@@ -41,7 +41,6 @@ public class StoreItem extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	protected Store store;
-	protected UserRef user;
 	protected String title;
 	protected String description;
 	protected BigDecimal price;
@@ -85,16 +84,6 @@ public class StoreItem extends BaseEntity {
 	}
 	public void setStore(Store store) {
 		this.store = store;
-	}
-	
-	@JsonIgnore
-	@ManyToOne(targetEntity = UserRef.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_ref_id") 
-	public UserRef getUser() {
-		return user;
-	}
-	public void setUser(UserRef user) {
-		this.user = user;
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})

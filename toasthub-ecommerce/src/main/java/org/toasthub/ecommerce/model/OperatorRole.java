@@ -88,7 +88,7 @@ public class OperatorRole extends BaseEntity implements Serializable{
 	
 	@JsonIgnore
 	@ManyToOne(targetEntity = StoreOperator.class)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "operator_id")
 	public StoreOperator getOperator() {
 		return operator;
 	}

@@ -30,15 +30,18 @@ import javax.persistence.Transient;
 
 
 @Entity
-@Table(name = "cart_item")
+@Table(name = "ec_cart_item")
 public class CartItem extends BaseEntity{
 	private static final long serialVersionUID = 1L;
 	
-	private StoreItem item;
-	private int quantity;
-	private BigDecimal totalPrice;
-	private Long userId;
-	private int availableQuantity;
+	protected StoreItem item;
+	protected int quantity;
+	protected BigDecimal totalPrice;
+	protected BigDecimal totalPriceCrypto;
+	protected Long userId;
+	
+	// Transient
+	protected int availableQuantity;
 
 	// Constructor
 	public CartItem() {
@@ -47,9 +50,9 @@ public class CartItem extends BaseEntity{
 
 
 
-	 @ManyToOne(targetEntity = StoreItem.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	 @JoinColumn(name = "item") 
-	 public StoreItem getItem() {
+	@ManyToOne(targetEntity = StoreItem.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_item_id") 
+	public StoreItem getItem() {
 		return item;
 	}
 	public void setItem(StoreItem item) {
@@ -71,8 +74,16 @@ public class CartItem extends BaseEntity{
 	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	
+	@Column(name = "total_price_crypto")
+	public BigDecimal getTotalPriceCrypto() {
+		return totalPriceCrypto;
+	}
+	public void setTotalPriceCrypto(BigDecimal totalPriceCrypto) {
+		this.totalPriceCrypto = totalPriceCrypto;
+	}
 
-	@Column(name = "user_id") 
+	@Column(name = "user_ref_id") 
 	public Long getUserId() {
 		return userId;
 	}

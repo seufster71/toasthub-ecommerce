@@ -30,14 +30,13 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "attachment_meta")
+@Table(name = "ec_attachment_meta")
 public class AttachmentMeta extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	protected String title;
 	protected Long size;
 	protected String contentType;
-	protected String processType;
 	protected Attachment attachment;
 	//protected AttachmentThumbnail thumbNail;
 	protected StoreItem storeItem;
@@ -53,7 +52,6 @@ public class AttachmentMeta extends BaseEntity implements Serializable {
 		this.setCreated(new Date());
 		this.setSize(size);
 		this.setContentType(contentType);
-		this.setProcessType(processType);
 		this.setFile(file);
 	}
 	
@@ -81,17 +79,9 @@ public class AttachmentMeta extends BaseEntity implements Serializable {
 		this.contentType = contentType;
 	}
 	
-	@Column(name = "process_type")
-	public String getProcessType() {
-		return processType;
-	}
-	public void setProcessType(String processType) {
-		this.processType = processType;
-	}
-	
 	@JsonIgnore
 	@ManyToOne(targetEntity = Attachment.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "file_id")
+	@JoinColumn(name = "attachment_id")
 	public Attachment getAttachment() {
 		return attachment;
 	}

@@ -32,11 +32,12 @@ import org.toasthub.core.general.api.View;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
-@Table(name = "Attachment")
+@Table(name = "ec_attachment")
 public class Attachment implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Long id;
-	private byte[] data;
+	
+	protected Long id;
+	protected byte[] data;
 	
 	protected Long version;
 	

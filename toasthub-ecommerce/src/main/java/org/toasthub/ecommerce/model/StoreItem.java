@@ -24,31 +24,39 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.toasthub.core.general.api.View;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
-@Table(name = "store_item")
+@Table(name = "ec_store_item")
 public class StoreItem extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	private String title;
-	private String description;
-	private BigDecimal price;
-	private String priceType;
-	private BigDecimal overridePrice;
-	private int quantity;
-	private String size;
-	private String color;
-	private String category;
-	private boolean available;
-	private LocalDate availableDate;
-	private LocalDate disableDate;
+	protected Store store;
+	protected UserRef user;
+	protected String title;
+	protected String description;
+	protected BigDecimal price;
+	protected String priceType;
+	protected BigDecimal overridePrice;
+	protected BigDecimal priceCrypto;
+	protected String priceCryptoType;
+	protected BigDecimal overridePriceCrypto;
+	protected int quantity;
+	protected String size;
+	protected String color;
+	protected String category;
+	protected boolean available;
+	protected LocalDate availableDate;
+	protected LocalDate disableDate;
 	protected Set<AttachmentMeta> attachments;
 	
 	// constructors
@@ -69,6 +77,26 @@ public class StoreItem extends BaseEntity {
 	}
 	
 	// Methods
+	@JsonIgnore
+	@ManyToOne(targetEntity = Store.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id") 
+	public Store getStore() {
+		return store;
+	}
+	public void setStore(Store store) {
+		this.store = store;
+	}
+	
+	@JsonIgnore
+	@ManyToOne(targetEntity = UserRef.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_ref_id") 
+	public UserRef getUser() {
+		return user;
+	}
+	public void setUser(UserRef user) {
+		this.user = user;
+	}
+	
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "title")
 	public String getTitle() {
@@ -114,6 +142,33 @@ public class StoreItem extends BaseEntity {
 		this.overridePrice = overridePrice;
 	}
 	
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "price_crypto")
+	public BigDecimal getPriceCrypto() {
+		return priceCrypto;
+	}
+	public void setPriceCrypto(BigDecimal priceCrypto) {
+		this.priceCrypto = priceCrypto;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "price_crypto_type")
+	public String getPriceCryptoType() {
+		return priceCryptoType;
+	}
+	public void setPriceCryptoType(String priceCryptoType) {
+		this.priceCryptoType = priceCryptoType;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "override_price_crypto")
+	public BigDecimal getOverridePriceCrypto() {
+		return overridePriceCrypto;
+	}
+	public void setOverridePriceCrypto(BigDecimal overridePriceCrypto) {
+		this.overridePriceCrypto = overridePriceCrypto;
+	}
+
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "quantity")
 	public int getQuantity() {

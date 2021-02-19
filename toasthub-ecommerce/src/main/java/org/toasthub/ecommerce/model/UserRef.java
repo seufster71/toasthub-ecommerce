@@ -11,7 +11,7 @@ import org.toasthub.core.general.api.View;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
-@Table(name = "user_ref")
+@Table(name = "ec_user_ref")
 public class UserRef extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;

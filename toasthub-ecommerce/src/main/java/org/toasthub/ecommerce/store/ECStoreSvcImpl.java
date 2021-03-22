@@ -32,18 +32,19 @@ import org.toasthub.core.general.model.GlobalConstant;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.model.Attachment;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.StoreItem;
+import org.toasthub.ecommerce.model.ECAttachment;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECStore;
+import org.toasthub.ecommerce.model.ECStoreItem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service("ECStoreSvc")
-public class StoreSvcImpl implements StoreSvc, ServiceProcessor {
+public class ECStoreSvcImpl implements ECStoreSvc, ServiceProcessor {
 
 	@Autowired
 	@Qualifier("ECStoreDao")
-	StoreDao storeDao;
+	ECStoreDao storeDao;
 	
 	@Autowired
 	UtilSvc utilSvc;
@@ -88,7 +89,7 @@ public class StoreSvcImpl implements StoreSvc, ServiceProcessor {
 			break;
 		case "SAVE":
 			if (!request.containsParam(PrefCacheUtil.PREFFORMKEYS)) {
-				List<String> forms =  new ArrayList<String>(Arrays.asList("PM_PRODUCT_FORM"));
+				List<String> forms =  new ArrayList<String>(Arrays.asList("EC_STORE_FORM"));
 				request.addParam(PrefCacheUtil.PREFFORMKEYS, forms);
 			}
 			request.addParam(PrefCacheUtil.PREFGLOBAL, global);
@@ -129,11 +130,11 @@ public class StoreSvcImpl implements StoreSvc, ServiceProcessor {
 				request.addParam(GlobalConstant.ITEM, response.getParam(GlobalConstant.ITEM));
 				response.getParams().remove(GlobalConstant.ITEM);
 			} else {
-				StoreItem storeItem = new StoreItem();
-				storeItem.setActive(true);
-				storeItem.setArchive(false);
-				storeItem.setLocked(false);
-				request.addParam(GlobalConstant.ITEM, storeItem);
+				ECStore store = new ECStore();
+				store.setActive(true);
+				store.setArchive(false);
+				store.setLocked(false);
+				request.addParam(GlobalConstant.ITEM, store);
 			}
 			// marshall
 			utilSvc.marshallFields(request, response);
@@ -233,7 +234,7 @@ public class StoreSvcImpl implements StoreSvc, ServiceProcessor {
 	}
 
 	@Override
-	public AttachmentMeta getAttachment(String fileId) {
+	public ECAttachmentMeta getAttachment(String fileId) {
 		try {
 			Long id = Long.parseLong(fileId);
 			return storeDao.getAttachment(id);

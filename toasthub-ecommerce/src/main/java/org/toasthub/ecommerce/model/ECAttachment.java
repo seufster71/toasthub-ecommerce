@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_attachment")
-public class Attachment implements Serializable {
+public class ECAttachment implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long id;
@@ -41,11 +41,11 @@ public class Attachment implements Serializable {
 	
 	protected Long version;
 	
-	public Attachment() {
+	public ECAttachment() {
 		super();
 	}
 	
-	public Attachment(byte[] data) {
+	public ECAttachment(byte[] data) {
 		setData(data);
 	}
 

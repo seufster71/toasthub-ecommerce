@@ -30,30 +30,30 @@ import org.toasthub.core.general.model.GlobalConstant;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.member.MemberDao;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.CartItem;
+import org.toasthub.ecommerce.member.ECMemberDao;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECCartItem;
 import org.toasthub.ecommerce.model.ECConstant;
-import org.toasthub.ecommerce.model.Member;
-import org.toasthub.ecommerce.store.StoreDao;
+import org.toasthub.ecommerce.model.ECMember;
+import org.toasthub.ecommerce.storeItem.ECStoreItemDao;
 import org.toasthub.security.model.MyUserPrincipal;
 import org.toasthub.security.model.User;
 
 
 @Service("ECCartSvc")
-public class CartSvcImpl implements CartSvc {
+public class ECCartSvcImpl implements ECCartSvc {
 
 	@Autowired
 	@Qualifier("ECCartDao")
-	CartDao cartDao;
+	ECCartDao cartDao;
 	
 	@Autowired
-	@Qualifier("ECStpreDao")
-	StoreDao storeDao;
+	@Qualifier("ECStoreItemDao")
+	ECStoreItemDao storeItemDao;
 	
 	@Autowired
-	@Qualifier("ECUserRefDao")
-	MemberDao userRefDao;
+	@Qualifier("ECMemberDao")
+	ECMemberDao memberDao;
 	
 	@Autowired
 	UtilSvc utilSvc;
@@ -125,7 +125,7 @@ public class CartSvcImpl implements CartSvc {
 	}
 
 	@Override
-	public AttachmentMeta getAttachment(String fileId) {
+	public ECAttachmentMeta getAttachment(String fileId) {
 		try {
 			Long id = Long.parseLong(fileId);
 			return cartDao.getAttachment(id);
@@ -139,7 +139,7 @@ public class CartSvcImpl implements CartSvc {
 	public void itemCount(RestRequest request, RestResponse response) {
 		try {
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			Member member = userRefDao.getMember(user);
+			ECMember member = memberDao.getMember(user);
 			request.addParam(ECConstant.MEMBER, member);
 			cartDao.itemCount(request, response);
 		} catch (Exception e) {
@@ -162,14 +162,14 @@ public class CartSvcImpl implements CartSvc {
 	public void items(RestRequest request, RestResponse response) {
 		try {
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			Member member = userRefDao.getMember(user);
+			ECMember member = memberDao.getMember(user);
 			request.addParam(ECConstant.MEMBER, member);
 		
 			cartDao.items(request, response);
 			// check for available quantity
-			List<CartItem>	list = (List<CartItem>) response.getParam(GlobalConstant.ITEMS);
-			for(CartItem item : list) {
-				item.setAvailableQuantity(storeDao.getQuantity(item.getItem().getId()));
+			List<ECCartItem>	list = (List<ECCartItem>) response.getParam(GlobalConstant.ITEMS);
+			for(ECCartItem item : list) {
+				item.setAvailableQuantity(storeItemDao.getQuantity(item.getItem().getId()));
 			}
 			
 			if (response.getParam("items") == null){
@@ -193,7 +193,7 @@ public class CartSvcImpl implements CartSvc {
 				return;
 			}
 			User user = ((MyUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-			Member member = userRefDao.getMember(user);
+			ECMember member = memberDao.getMember(user);
 			request.addParam(ECConstant.MEMBER, member);
 			
 			// get existing item
@@ -204,7 +204,7 @@ public class CartSvcImpl implements CartSvc {
 				request.addParam(GlobalConstant.ITEM, response.getParam(GlobalConstant.ITEM));
 				response.getParams().remove(GlobalConstant.ITEM);
 			} else {
-				CartItem cartItem = new CartItem();
+				ECCartItem cartItem = new ECCartItem();
 				cartItem.setUserId(user.getId());
 				//cartItem.setItem(storeItem);
 				cartItem.setQuantity(1);

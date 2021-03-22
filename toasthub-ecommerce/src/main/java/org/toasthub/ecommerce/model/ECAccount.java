@@ -18,27 +18,27 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_account")
-public class Account extends BaseEntity implements Serializable {
+public class ECAccount extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Member user;
+	protected ECMember user;
 	protected BigDecimal balance;
 	protected String type;
 	protected BigDecimal balanceCryptoCurrency;
 	protected String typeCryptoCurrency;
 	
-	public Account(){
+	public ECAccount(){
 	}
 	
 	// Setters/Getters
 	@JsonIgnore
-	@ManyToOne(targetEntity = Member.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECMember.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_ref_id") 
-	public Member getUser() {
+	public ECMember getUser() {
 		return user;
 	}
-	public void setUser(Member user) {
+	public void setUser(ECMember user) {
 		this.user = user;
 	}
 	

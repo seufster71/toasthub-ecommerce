@@ -31,20 +31,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "ec_attachment_meta")
-public class AttachmentMeta extends BaseEntity implements Serializable {
+public class ECAttachmentMeta extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	protected String title;
 	protected Long size;
 	protected String contentType;
-	protected Attachment attachment;
+	protected ECAttachment attachment;
 	//protected AttachmentThumbnail thumbNail;
-	protected StoreItem storeItem;
+	protected ECStoreItem storeItem;
 	
-	public AttachmentMeta() {
+	public ECAttachmentMeta() {
 		super();
 	}
-	public AttachmentMeta(String title, long size, String contentType , String processType, Attachment file){
+	public ECAttachmentMeta(String title, long size, String contentType , String processType, ECAttachment file){
 		this.setTitle(title);
 		this.setActive(true);
 		this.setArchive(false);
@@ -52,7 +52,7 @@ public class AttachmentMeta extends BaseEntity implements Serializable {
 		this.setCreated(new Date());
 		this.setSize(size);
 		this.setContentType(contentType);
-		this.setFile(file);
+		this.setAttachment(file);
 	}
 	
 	@Column(name = "title")
@@ -80,22 +80,22 @@ public class AttachmentMeta extends BaseEntity implements Serializable {
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = Attachment.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECAttachment.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "attachment_id")
-	public Attachment getAttachment() {
+	public ECAttachment getAttachment() {
 		return attachment;
 	}
-	public void setFile(Attachment attachment) {
+	public void setAttachment(ECAttachment attachment) {
 		this.attachment = attachment;
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = StoreItem.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECStoreItem.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_item_id")
-	public StoreItem getStoreItem() {
+	public ECStoreItem getStoreItem() {
 		return storeItem;
 	}
-	public void setStoreItem(StoreItem storeItem) {
+	public void setStoreItem(ECStoreItem storeItem) {
 		this.storeItem = storeItem;
 	}
 	

@@ -22,56 +22,44 @@ package org.toasthub.ecommerce.model;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.toasthub.core.general.api.View;
 import org.toasthub.core.general.model.BaseEntity;
-import org.toasthub.core.general.model.Text;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
-@Table(name = "ec_role")
-public class Role extends BaseEntity implements Serializable{
+@Table(name = "ec_permission")
+public class ECPermission extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	protected String name;
 	protected String code;
-	protected Set<RolePermission> permissions;
-	protected Instant startDate;
-	protected Instant endDate;
 	
-	//Constructor
-	public Role() {
-		super();
-	}
-	
-	public Role(String code, Text title, Boolean defaultLang, String dir){
+	// constructors
+	public ECPermission(){
 		this.setActive(true);
 		this.setArchive(false);
 		this.setLocked(false);
 		this.setCreated(Instant.now());
 	}
-
-	public Role(boolean active, boolean archive, boolean locked, String name, String code, Instant startDate, Instant endDate) {
-		this.setActive(active);
-		this.setArchive(archive);
-		this.setLocked(locked);
-		this.setName(name);
+	
+	public ECPermission(String code, String name, String rights) {
+		this.setActive(true);
+		this.setArchive(false);
+		this.setLocked(false);
+		this.setCreated(Instant.now());
 		this.setCode(code);
-		this.setStartDate(startDate);
-		this.setEndDate(endDate);
+		this.setName(name);
 	}
 	
-	// Methods
+
+	// Setters and getters
 	
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "name")
@@ -81,7 +69,7 @@ public class Role extends BaseEntity implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "code")
 	public String getCode() {
@@ -91,31 +79,5 @@ public class Role extends BaseEntity implements Serializable{
 		this.code = code;
 	}
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-	public Set<RolePermission> getPermissions() {
-		return permissions;
-	}
-	public void setPermissions(Set<RolePermission> permissions) {
-		this.permissions = permissions;
-	}
-	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "start_date")
-	public Instant getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Instant startDate) {
-		this.startDate = startDate;
-	}
-
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "end_date")
-	public Instant getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Instant endDate) {
-		this.endDate = endDate;
-	}
 
 }

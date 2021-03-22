@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.member;
+package org.toasthub.ecommerce.cart;
 
-import org.toasthub.ecommerce.model.Member;
-import org.toasthub.security.model.User;
+import org.toasthub.core.general.model.RestRequest;
+import org.toasthub.core.general.model.RestResponse;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECBaseSvc;
 
-public interface MemberDao {
+
+public interface ECCartSvc extends ECBaseSvc {
 	
-    public Member getMember(User user) throws Exception;
+	public void attachmentList(RestRequest request, RestResponse response);
+	public ECAttachmentMeta getAttachment(String fileId);
 
 }

@@ -16,15 +16,14 @@
 
 package org.toasthub.ecommerce.cart;
 
-import org.toasthub.core.general.model.RestRequest;
-import org.toasthub.core.general.model.RestResponse;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.BaseSvc;
+import org.toasthub.ecommerce.model.ECAttachment;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECBaseDao;
 
-
-public interface CartSvc extends BaseSvc {
-	
-	public void attachmentList(RestRequest request, RestResponse response);
-	public AttachmentMeta getAttachment(String fileId);
-
+public interface ECCartDao extends ECBaseDao {
+    
+    public ECAttachment getAttachment(ECAttachmentMeta attachmentMeta) throws Exception;
+    public ECAttachmentMeta getAttachment(Long id) throws Exception;
+    
+	public long totalCartItems(long userId);
 }

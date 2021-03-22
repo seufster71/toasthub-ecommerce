@@ -38,12 +38,12 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_operator_role")
-public class OperatorRole extends BaseEntity implements Serializable{
+public class ECOperatorRole extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	protected StoreOperator operator;
-	protected Role role;
+	protected ECOperator operator;
+	protected ECRole role;
 	protected Integer sortOrder;
 	protected Instant startDate;
 	protected Instant endDate;
@@ -52,10 +52,10 @@ public class OperatorRole extends BaseEntity implements Serializable{
 	protected Long roleId;
 		
 	// Constructor
-	public OperatorRole(){}
+	public ECOperatorRole(){}
 	
 	
-	public OperatorRole(Long id, boolean active, Integer sortOrder, Instant startDate, Instant endDate, Long roleId) {
+	public ECOperatorRole(Long id, boolean active, Integer sortOrder, Instant startDate, Instant endDate, Long roleId) {
 		this.setId(id);
 		this.setActive(active);
 		this.setSortOrder(sortOrder);
@@ -64,7 +64,7 @@ public class OperatorRole extends BaseEntity implements Serializable{
 		this.setRoleId(roleId);
 	}
 	
-	public OperatorRole(Role role, Integer sortOrder, Instant startDate, Instant endDate) {
+	public ECOperatorRole(ECRole role, Integer sortOrder, Instant startDate, Instant endDate) {
 		this.setRole(role);
 		this.setSortOrder(sortOrder);
 		this.setStartDate(startDate);
@@ -75,7 +75,7 @@ public class OperatorRole extends BaseEntity implements Serializable{
 		this.setCreated(Instant.now());
 	}
 	
-	public OperatorRole(boolean active, boolean archive, boolean locked, Integer sortOrder, Instant startDate, Instant endDate, StoreOperator operator, Role role) {
+	public ECOperatorRole(boolean active, boolean archive, boolean locked, Integer sortOrder, Instant startDate, Instant endDate, ECOperator operator, ECRole role) {
 		this.setActive(true);
 		this.setArchive(false);
 		this.setLocked(false);
@@ -87,22 +87,22 @@ public class OperatorRole extends BaseEntity implements Serializable{
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = StoreOperator.class)
+	@ManyToOne(targetEntity = ECOperator.class)
 	@JoinColumn(name = "operator_id")
-	public StoreOperator getOperator() {
+	public ECOperator getOperator() {
 		return operator;
 	}
-	public void setOperator(StoreOperator operator) {
+	public void setOperator(ECOperator operator) {
 		this.operator = operator;
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = Role.class)
+	@ManyToOne(targetEntity = ECRole.class)
 	@JoinColumn(name = "role_id")
-	public Role getRole() {
+	public ECRole getRole() {
 		return role;
 	}
-	public void setRole(Role role) {
+	public void setRole(ECRole role) {
 		this.role = role;
 	}
 	

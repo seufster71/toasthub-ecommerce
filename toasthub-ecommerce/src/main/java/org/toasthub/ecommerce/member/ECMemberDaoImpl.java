@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.toasthub.core.common.EntityManagerDataSvc;
 import org.toasthub.core.common.UtilSvc;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.model.Member;
+import org.toasthub.ecommerce.model.ECMember;
 import org.toasthub.security.model.User;
 
 @Repository("ECMemberDao")
 @Transactional("TransactionManagerData")
-public class MemberDaoImpl implements MemberDao {
+public class ECMemberDaoImpl implements ECMemberDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
@@ -37,9 +37,9 @@ public class MemberDaoImpl implements MemberDao {
 	PrefCacheUtil prefCacheUtil;
 
 	@Override
-	public Member getMember(User user) throws Exception {
-		String HQLQuery = "SELECT x FROM UserRef AS x WHERE x.userRefId =: id ";
-		return (Member) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", user.getId()).getSingleResult();
+	public ECMember getMember(User user) throws Exception {
+		String HQLQuery = "SELECT x FROM ECMember AS x WHERE x.userId =: id ";
+		return (ECMember) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", user.getId()).getSingleResult();
 	}
 
 }

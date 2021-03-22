@@ -12,26 +12,26 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_store")
-public class Store extends BaseEntity implements Serializable {
+public class ECStore extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected String title;
+	protected String name;
 	protected String description;
 	// list of operators
 
 	
-	public Store(){
+	public ECStore(){
 	}
 	
 	// Setters/Getters
 	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "title")
-	public String getTitle() {
-		return title;
+	@Column(name = "name")
+	public String getName() {
+		return name;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})

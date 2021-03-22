@@ -13,36 +13,36 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "ec_store_operator")
-public class StoreOperator extends BaseEntity implements Serializable {
+public class ECOperator extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Store store;
-	protected Member member;
+	protected ECStore store;
+	protected ECMember member;
 	// list of operator roles
 
 	
-	public StoreOperator(){
+	public ECOperator(){
 	}
 	
 	// Setters/Getters
 	@JsonIgnore
-	@ManyToOne(targetEntity = Store.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECStore.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_id") 
-	public Store getStore() {
+	public ECStore getStore() {
 		return store;
 	}
-	public void setStore(Store store) {
+	public void setStore(ECStore store) {
 		this.store = store;
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = Member.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECMember.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id") 
-	public Member getMember() {
+	public ECMember getMember() {
 		return member;
 	}
-	public void setMember(Member member) {
+	public void setMember(ECMember member) {
 		this.member = member;
 	}
 	

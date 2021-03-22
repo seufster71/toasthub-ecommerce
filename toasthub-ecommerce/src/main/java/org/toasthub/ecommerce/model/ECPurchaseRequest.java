@@ -34,12 +34,12 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_purchase_request")
-public class PurchaseRequest extends BaseEntity {
+public class ECPurchaseRequest extends ECBaseEntity {
 	private static final long serialVersionUID = 1L;
 
-	protected Member requester;
+	protected ECMember requester;
 	protected String requesterName;
-	protected StoreItem item;
+	protected ECStoreItem item;
 	protected String itemName;
 	protected int quantity;
 	protected BigDecimal price;
@@ -50,15 +50,15 @@ public class PurchaseRequest extends BaseEntity {
 	protected String itemColor;
 
 	// Constructor
-	public PurchaseRequest() {}
+	public ECPurchaseRequest() {}
 
 	@JsonIgnore
-	@ManyToOne(targetEntity = Member.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECMember.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "requester_id") 
-	public Member getRequester() {
+	public ECMember getRequester() {
 		return requester;
 	}
-	public void setRequester(Member requester) {
+	public void setRequester(ECMember requester) {
 		this.requester = requester;
 	}
 
@@ -72,12 +72,12 @@ public class PurchaseRequest extends BaseEntity {
 	}
 
 	@JsonIgnore
-	@ManyToOne(targetEntity = StoreItem.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECStoreItem.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id")
-	public StoreItem getItem() {
+	public ECStoreItem getItem() {
 		return item;
 	}
-	public void setItem(StoreItem item) {
+	public void setItem(ECStoreItem item) {
 		this.item = item;
 	}
 

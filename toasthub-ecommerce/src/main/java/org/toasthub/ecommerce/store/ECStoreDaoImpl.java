@@ -32,13 +32,14 @@ import org.toasthub.core.general.model.GlobalConstant;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.model.Attachment;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.StoreItem;
+import org.toasthub.ecommerce.model.ECAttachment;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECStore;
+import org.toasthub.ecommerce.model.ECStoreItem;
 
 @Repository("ECStoreDao")
 @Transactional("TransactionManagerData")
-public class StoreDaoImpl implements StoreDao {
+public class ECStoreDaoImpl implements ECStoreDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
@@ -50,7 +51,7 @@ public class StoreDaoImpl implements StoreDao {
 
 	@Override
 	public void itemCount(RestRequest request, RestResponse response) {
-		String queryStr = "SELECT COUNT(DISTINCT x) FROM StoreItem as x ";
+		String queryStr = "SELECT COUNT(DISTINCT x) FROM ECStore as x ";
 		boolean and = false;
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
 			if (!and) { queryStr += " WHERE "; }
@@ -73,17 +74,17 @@ public class StoreDaoImpl implements StoreDao {
 			String lookupStr = "";
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.name LIKE :titleValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_CATEGORY")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.name LIKE :categoryValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.active LIKE :statusValue"; 
 						or = true;
@@ -109,13 +110,13 @@ public class StoreDaoImpl implements StoreDao {
 		if (searchCriteria != null){
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {  
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
 						query.setParameter("titleValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_CATEGORY")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
 						query.setParameter("categoryValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
 						if ("active".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
 							query.setParameter("statusValue", true);
 						} else if ("disabled".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
@@ -137,11 +138,11 @@ public class StoreDaoImpl implements StoreDao {
 	@Override
 	public void item(RestRequest request, RestResponse response) {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
-			String queryStr = "SELECT x FROM StoreItem AS x WHERE x.id =:id";
+			String queryStr = "SELECT x FROM ECStore AS x WHERE x.id =:id";
 			Query query = entityManagerDataSvc.getInstance().createQuery(queryStr);
 		
 			query.setParameter("id", new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
-			StoreItem storeItem = (StoreItem) query.getSingleResult();
+			ECStore storeItem = (ECStore) query.getSingleResult();
 			
 			response.addParam(GlobalConstant.ITEM, storeItem);
 		} else {
@@ -151,7 +152,7 @@ public class StoreDaoImpl implements StoreDao {
 
 	@Override
 	public void items(RestRequest request, RestResponse response) {
-		String queryStr = "SELECT DISTINCT x FROM StoreItem AS x ";
+		String queryStr = "SELECT DISTINCT x FROM ECStore AS x ";
 		
 		boolean and = false;
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
@@ -176,17 +177,17 @@ public class StoreDaoImpl implements StoreDao {
 			String lookupStr = "";
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.name LIKE :titleValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_CATEGORY")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.name LIKE :categoryValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.active LIKE :statusValue"; 
 						or = true;
@@ -218,17 +219,17 @@ public class StoreDaoImpl implements StoreDao {
 			
 			for (LinkedHashMap<String,String> item : orderCriteria) {
 				if (item.containsKey(GlobalConstant.ORDERCOLUMN) && item.containsKey(GlobalConstant.ORDERDIR)) {
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STOREITEM_TABLE_TITLE")){
+					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_TITLE")){
 						if (comma) { orderItems.append(","); }
 						orderItems.append("x.title ").append(item.get(GlobalConstant.ORDERDIR));
 						comma = true;
 					}
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STOREITEM_TABLE_CATEGORY")){
+					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
 						if (comma) { orderItems.append(","); }
 						orderItems.append("x.category ").append(item.get(GlobalConstant.ORDERDIR));
 						comma = true;
 					}
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STOREITEM_TABLE_STATUS")){
+					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_STATUS")){
 						if (comma) { orderItems.append(","); }
 						orderItems.append("x.active ").append(item.get(GlobalConstant.ORDERDIR));
 						comma = true;
@@ -252,13 +253,13 @@ public class StoreDaoImpl implements StoreDao {
 		if (searchCriteria != null){
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {  
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
 						query.setParameter("titleValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_CATEGORY")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
 						query.setParameter("categoryValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STOREITEM_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
 						if ("active".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
 							query.setParameter("statusValue", true);
 						} else if ("disabled".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
@@ -273,7 +274,7 @@ public class StoreDaoImpl implements StoreDao {
 			query.setMaxResults((Integer) request.getParam(GlobalConstant.LISTLIMIT));
 		}
 		@SuppressWarnings("unchecked")
-		List<StoreItem> storeItems = query.getResultList();
+		List<ECStore> storeItems = query.getResultList();
 
 		response.addParam(GlobalConstant.ITEMS, storeItems);
 		
@@ -283,12 +284,12 @@ public class StoreDaoImpl implements StoreDao {
 	public void delete(RestRequest request, RestResponse response) {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
 			if (request.containsParam(GlobalConstant.HARDDELETE) && !"YES".equals(request.getParam(GlobalConstant.HARDDELETE))) {
-				StoreItem storeItem = (StoreItem) entityManagerDataSvc.getInstance().getReference(StoreItem.class,  new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECStore storeItem = (ECStore) entityManagerDataSvc.getInstance().getReference(ECStore.class,  new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
 				entityManagerDataSvc.getInstance().remove(storeItem);
 				
 			} else {
 				// soft delete store items
-				StoreItem storeItem = entityManagerDataSvc.getInstance().find(StoreItem.class,new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECStore storeItem = entityManagerDataSvc.getInstance().find(ECStore.class,new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
 				storeItem.setActive(false);
 				storeItem.setArchive(true);
 				entityManagerDataSvc.getInstance().merge(storeItem);
@@ -300,38 +301,32 @@ public class StoreDaoImpl implements StoreDao {
 
 	@Override
 	public void save(RestRequest request, RestResponse response) {
-		StoreItem storeItem = (StoreItem) request.getParam(GlobalConstant.ITEM);
-		entityManagerDataSvc.getInstance().merge(storeItem);
+		ECStore store = (ECStore) request.getParam(GlobalConstant.ITEM);
+		entityManagerDataSvc.getInstance().merge(store);
 	}
 
 	@Override
-	public Attachment getAttachment(AttachmentMeta attachmentMeta) throws Exception {
-		return entityManagerDataSvc.getInstance().find(Attachment.class, attachmentMeta.getAttachment().getId());
+	public ECAttachment getAttachment(ECAttachmentMeta attachmentMeta) throws Exception {
+		return entityManagerDataSvc.getInstance().find(ECAttachment.class, attachmentMeta.getAttachment().getId());
 	}
 
 	@Override
-	public AttachmentMeta getAttachment(Long id) throws Exception {
-		String HQLQuery = "SELECT a FROM AttachmentMeta AS a JOIN FETCH a.file WHERE a.id=:id ";
-		return (AttachmentMeta) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", id).getSingleResult();
+	public ECAttachmentMeta getAttachment(Long id) throws Exception {
+		String HQLQuery = "SELECT a FROM ECAttachmentMeta AS a JOIN FETCH a.file WHERE a.id=:id ";
+		return (ECAttachmentMeta) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", id).getSingleResult();
 	}
 
 	@Override
 	public void deleteAttachment(Long id) throws Exception {
-		AttachmentMeta attachmentMeta = entityManagerDataSvc.getInstance().find(AttachmentMeta.class, id);
+		ECAttachmentMeta attachmentMeta = entityManagerDataSvc.getInstance().find(ECAttachmentMeta.class, id);
 		entityManagerDataSvc.getInstance().remove(attachmentMeta);
 		entityManagerDataSvc.getInstance().flush();
 		entityManagerDataSvc.getInstance().clear();
 	}
 
 	@Override
-	public AttachmentMeta saveAttachment(AttachmentMeta attachmentMeta) throws Exception {
+	public ECAttachmentMeta saveAttachment(ECAttachmentMeta attachmentMeta) throws Exception {
 		return entityManagerDataSvc.getInstance().merge(attachmentMeta);
 	}
 
-	@Override
-	public int getQuantity(Long storeItemId) {
-		String HQLQuery = "SELECT new StoreItem(s.id, s.title, s.quantity) FROM StoreItem AS s WHERE s.id=:id ";
-		StoreItem i = (StoreItem) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", storeItemId).getSingleResult();
-		return i.getQuantity();
-	}
 }

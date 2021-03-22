@@ -31,10 +31,10 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "ec_cart_item")
-public class CartItem extends BaseEntity{
+public class ECCartItem extends ECBaseEntity{
 	private static final long serialVersionUID = 1L;
 	
-	protected StoreItem item;
+	protected ECStoreItem item;
 	protected int quantity;
 	protected BigDecimal totalPrice;
 	protected BigDecimal totalPriceCrypto;
@@ -44,18 +44,18 @@ public class CartItem extends BaseEntity{
 	protected int availableQuantity;
 
 	// Constructor
-	public CartItem() {
+	public ECCartItem() {
 		super();
 	}
 
 
 
-	@ManyToOne(targetEntity = StoreItem.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECStoreItem.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_item_id") 
-	public StoreItem getItem() {
+	public ECStoreItem getItem() {
 		return item;
 	}
-	public void setItem(StoreItem item) {
+	public void setItem(ECStoreItem item) {
 		this.item = item;
 	}
 

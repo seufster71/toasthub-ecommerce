@@ -23,7 +23,7 @@ package org.toasthub.ecommerce.model;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 
-public interface BaseSvc {
+public interface ECBaseSvc {
 
 	public void process(RestRequest request, RestResponse response);
 	public void itemCount(RestRequest request, RestResponse response);

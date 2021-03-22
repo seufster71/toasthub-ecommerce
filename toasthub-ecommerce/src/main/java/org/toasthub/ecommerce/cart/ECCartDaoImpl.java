@@ -32,14 +32,14 @@ import org.toasthub.core.general.model.GlobalConstant;
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
-import org.toasthub.ecommerce.model.Attachment;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.CartItem;
+import org.toasthub.ecommerce.model.ECAttachment;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECCartItem;
 
 
 @Repository("ECCartDao")
 @Transactional("TransactionManagerData")
-public class CartDaoImpl implements CartDao {
+public class ECCartDaoImpl implements ECCartDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
@@ -49,30 +49,30 @@ public class CartDaoImpl implements CartDao {
 	PrefCacheUtil prefCacheUtil;
 
 	@Override
-	public Attachment getAttachment(AttachmentMeta attachmentMeta) throws Exception {
-		return entityManagerDataSvc.getInstance().find(Attachment.class, attachmentMeta.getAttachment().getId());
+	public ECAttachment getAttachment(ECAttachmentMeta attachmentMeta) throws Exception {
+		return entityManagerDataSvc.getInstance().find(ECAttachment.class, attachmentMeta.getAttachment().getId());
 	}
 
 	@Override
-	public AttachmentMeta getAttachment(Long id) throws Exception {
-		String HQLQuery = "SELECT a FROM AttachmentMeta AS a JOIN FETCH a.file WHERE a.id=:id ";
-		return (AttachmentMeta) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", id).getSingleResult();
+	public ECAttachmentMeta getAttachment(Long id) throws Exception {
+		String HQLQuery = "SELECT a FROM ECAttachmentMeta AS a JOIN FETCH a.file WHERE a.id=:id ";
+		return (ECAttachmentMeta) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", id).getSingleResult();
 	}
 
 	@Override
 	public long totalCartItems(long userId) {
-		String HQLQuery = "SELECT DISTINCT i FROM CartItem AS i INNER JOIN FETCH i.item AS item WHERE i.active=true AND i.userId = :userId";
+		String HQLQuery = "SELECT DISTINCT i FROM ECCartItem AS i INNER JOIN FETCH i.item AS item WHERE i.active=true AND i.userId = :userId";
 
 		Query query = entityManagerDataSvc.getInstance().createQuery(HQLQuery);
 		query.setParameter("userId", userId);
 	
 
 		@SuppressWarnings("unchecked")
-		List<CartItem> resultList = query.getResultList();
+		List<ECCartItem> resultList = query.getResultList();
 		
 		long total=0;
 		
-		for(CartItem ci: resultList) {
+		for(ECCartItem ci: resultList) {
 			total=total+ci.getQuantity();
 		}
 		
@@ -83,12 +83,12 @@ public class CartDaoImpl implements CartDao {
 	public void delete(RestRequest request, RestResponse response) throws Exception {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
 			if (request.containsParam(GlobalConstant.HARDDELETE) && !"YES".equals(request.getParam(GlobalConstant.HARDDELETE))) {
-				CartItem cartItem = (CartItem) entityManagerDataSvc.getInstance().getReference(CartItem.class,  new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECCartItem cartItem = (ECCartItem) entityManagerDataSvc.getInstance().getReference(ECCartItem.class,  new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
 				entityManagerDataSvc.getInstance().remove(cartItem);
 				
 			} else {
 				// soft delete cart items
-				CartItem cartItem = entityManagerDataSvc.getInstance().find(CartItem.class,new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECCartItem cartItem = entityManagerDataSvc.getInstance().find(ECCartItem.class,new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
 				cartItem.setActive(false);
 				cartItem.setArchive(true);
 				entityManagerDataSvc.getInstance().merge(cartItem);
@@ -104,7 +104,7 @@ public class CartDaoImpl implements CartDao {
 
 	@Override
 	public void save(RestRequest request, RestResponse response) throws Exception {
-		CartItem cartItem = (CartItem) request.getParam(GlobalConstant.ITEM);
+		ECCartItem cartItem = (ECCartItem) request.getParam(GlobalConstant.ITEM);
 		entityManagerDataSvc.getInstance().merge(cartItem);
 		request.addParam(GlobalConstant.ITEM, cartItem);
 	}
@@ -113,7 +113,7 @@ public class CartDaoImpl implements CartDao {
 	@Override
 	public void items(RestRequest request, RestResponse response) throws Exception {
 		
-		String queryStr = "SELECT DISTINCT x FROM CartItem AS x INNER JOIN FETCH x.item AS item LEFT JOIN FETCH item.attachments WHERE x.userId = :userId";
+		String queryStr = "SELECT DISTINCT x FROM ECCartItem AS x INNER JOIN FETCH x.item AS item LEFT JOIN FETCH item.attachments WHERE x.userId = :userId";
 		
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
 			queryStr += " AND x.active =:active ";
@@ -198,7 +198,7 @@ public class CartDaoImpl implements CartDao {
 			query.setMaxResults((Integer) request.getParam(GlobalConstant.LISTLIMIT));
 		}
 		@SuppressWarnings("unchecked")
-		List<CartItem> cartItems = query.getResultList();
+		List<ECCartItem> cartItems = query.getResultList();
 
 		response.addParam(GlobalConstant.ITEMS, cartItems);
 		
@@ -208,7 +208,7 @@ public class CartDaoImpl implements CartDao {
 
 	@Override
 	public void itemCount(RestRequest request, RestResponse response) throws Exception {
-		String queryStr = "SELECT COUNT(DISTINCT x) FROM CartItem as x WHERE x.userId = :userId";
+		String queryStr = "SELECT COUNT(DISTINCT x) FROM ECCartItem as x WHERE x.userId = :userId";
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
 			queryStr += " AND x.active =:active ";
 		}
@@ -269,11 +269,11 @@ public class CartDaoImpl implements CartDao {
 	@Override
 	public void item(RestRequest request, RestResponse response) throws Exception {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
-			String queryStr = "SELECT DISTINCT i FROM CartItem AS i INNER JOIN FETCH i.item AS item LEFT JOIN FETCH item.attachments WHERE i.active=true AND i.id = :id";
+			String queryStr = "SELECT DISTINCT i FROM ECCartItem AS i INNER JOIN FETCH i.item AS item LEFT JOIN FETCH item.attachments WHERE i.active=true AND i.id = :id";
 			Query query = entityManagerDataSvc.getInstance().createQuery(queryStr);
 		
 			query.setParameter("id", new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
-			CartItem cartItem = (CartItem) query.getSingleResult();
+			ECCartItem cartItem = (ECCartItem) query.getSingleResult();
 			
 			response.addParam(GlobalConstant.ITEM, cartItem);
 		} else {

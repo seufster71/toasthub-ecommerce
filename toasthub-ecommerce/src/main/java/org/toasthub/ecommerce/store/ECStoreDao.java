@@ -16,16 +16,15 @@
 
 package org.toasthub.ecommerce.store;
 
-import org.springframework.web.multipart.MultipartFile;
-import org.toasthub.core.general.model.RestRequest;
-import org.toasthub.core.general.model.RestResponse;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.BaseSvc;
+import org.toasthub.ecommerce.model.ECAttachment;
+import org.toasthub.ecommerce.model.ECAttachmentMeta;
+import org.toasthub.ecommerce.model.ECBaseDao;
 
-public interface StoreSvc extends BaseSvc {
-
-	public void attachmentList(RestRequest request, RestResponse response);
-	public void deleteAttachment(RestRequest request,RestResponse response);
-	public void upload(Long jobId, MultipartFile file, RestResponse restResponse);
-	public AttachmentMeta getAttachment(String fileId);
+public interface ECStoreDao extends ECBaseDao {
+	
+    public ECAttachment getAttachment(ECAttachmentMeta attachmentMeta) throws Exception;
+    public ECAttachmentMeta getAttachment(Long id) throws Exception;
+    public void deleteAttachment(Long id) throws Exception;
+    public ECAttachmentMeta saveAttachment(ECAttachmentMeta attachmentMeta) throws Exception;
+    
 }

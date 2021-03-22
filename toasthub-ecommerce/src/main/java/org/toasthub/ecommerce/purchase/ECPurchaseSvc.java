@@ -18,9 +18,9 @@ package org.toasthub.ecommerce.purchase;
 
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
-import org.toasthub.ecommerce.model.BaseSvc;
+import org.toasthub.ecommerce.model.ECBaseSvc;
 
-public interface PurchaseSvc extends BaseSvc {
+public interface ECPurchaseSvc extends ECBaseSvc {
 	public void approve(RestRequest request,RestResponse response);
 	public void deny(RestRequest request,RestResponse response);
 	public void pendingList(RestRequest request,RestResponse response);

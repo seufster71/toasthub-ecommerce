@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 
 @MappedSuperclass()
-public class BaseEntity implements Serializable{
+public class ECBaseEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
@@ -31,7 +31,7 @@ public class BaseEntity implements Serializable{
 	private Long version;
 	
 	// Constructor
-	public BaseEntity() {
+	public ECBaseEntity() {
 	}
 	
 	

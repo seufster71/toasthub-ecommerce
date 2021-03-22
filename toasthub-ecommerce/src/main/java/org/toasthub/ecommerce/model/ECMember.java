@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_member")
-public class Member extends BaseEntity implements Serializable {
+public class ECMember extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,7 +20,7 @@ public class Member extends BaseEntity implements Serializable {
 	protected String username;
 	
 	
-	public Member(Long id, String username){
+	public ECMember(Long id, String username){
 		this.setUsername(username);
 	}
 	

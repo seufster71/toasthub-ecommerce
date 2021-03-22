@@ -36,19 +36,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "ec_store_item")
-public class StoreItem extends BaseEntity {
+public class ECStoreItem extends ECBaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	protected Store store;
-	protected String title;
+	protected ECStore store;
+	protected String name;
 	protected String description;
-	protected BigDecimal price;
-	protected String priceType;
-	protected BigDecimal overridePrice;
-	protected BigDecimal priceCrypto;
-	protected String priceCryptoType;
-	protected BigDecimal overridePriceCrypto;
 	protected int quantity;
 	protected String size;
 	protected String color;
@@ -56,20 +50,20 @@ public class StoreItem extends BaseEntity {
 	protected boolean available;
 	protected LocalDate availableDate;
 	protected LocalDate disableDate;
-	protected Set<AttachmentMeta> attachments;
+	protected Set<ECAttachmentMeta> attachments;
 	
 	// constructors
-	public StoreItem() {}
+	public ECStoreItem() {}
 	
-	public StoreItem(Long id, String title, int quantity) {
+	public ECStoreItem(Long id, String name, int quantity) {
 		this.setId(id);
-		this.setTitle(title);
+		this.setName(name);
 		this.setQuantity(quantity);
 	}
 	
-	public StoreItem(Long id, String title, int quantity, String size, String color) {
+	public ECStoreItem(Long id, String name, int quantity, String size, String color) {
 		this.setId(id);
-		this.setTitle(title);
+		this.setName(name);
 		this.setQuantity(quantity);
 		this.setSize(size);
 		this.setColor(color);
@@ -77,22 +71,22 @@ public class StoreItem extends BaseEntity {
 	
 	// Methods
 	@JsonIgnore
-	@ManyToOne(targetEntity = Store.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECStore.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_id") 
-	public Store getStore() {
+	public ECStore getStore() {
 		return store;
 	}
-	public void setStore(Store store) {
+	public void setStore(ECStore store) {
 		this.store = store;
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "title")
-	public String getTitle() {
-		return title;
+	@Column(name = "name")
+	public String getName() {
+		return name;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})
@@ -104,60 +98,6 @@ public class StoreItem extends BaseEntity {
 		this.description = description;
 	}
 	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "price")
-	public BigDecimal getPrice() {
-		return price;
-	}
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "price_type")
-	public String getPriceType() {
-		return priceType;
-	}
-	public void setPriceType(String priceType) {
-		this.priceType = priceType;
-	}
-	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "override_price")
-	public BigDecimal getOverridePrice() {
-		return overridePrice;
-	}
-	public void setOverridePrice(BigDecimal overridePrice) {
-		this.overridePrice = overridePrice;
-	}
-	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "price_crypto")
-	public BigDecimal getPriceCrypto() {
-		return priceCrypto;
-	}
-	public void setPriceCrypto(BigDecimal priceCrypto) {
-		this.priceCrypto = priceCrypto;
-	}
-
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "price_crypto_type")
-	public String getPriceCryptoType() {
-		return priceCryptoType;
-	}
-	public void setPriceCryptoType(String priceCryptoType) {
-		this.priceCryptoType = priceCryptoType;
-	}
-
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "override_price_crypto")
-	public BigDecimal getOverridePriceCrypto() {
-		return overridePriceCrypto;
-	}
-	public void setOverridePriceCrypto(BigDecimal overridePriceCrypto) {
-		this.overridePriceCrypto = overridePriceCrypto;
-	}
-
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "quantity")
 	public int getQuantity() {
@@ -223,10 +163,10 @@ public class StoreItem extends BaseEntity {
 
 	@JsonView({View.Member.class,View.Admin.class})
 	@OneToMany(mappedBy = "storeItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	public Set<AttachmentMeta> getAttachments() {
+	public Set<ECAttachmentMeta> getAttachments() {
 		return attachments;
 	}
-	public void setAttachments(Set<AttachmentMeta> attachments) {
+	public void setAttachments(Set<ECAttachmentMeta> attachments) {
 		this.attachments = attachments;
 	}
 }

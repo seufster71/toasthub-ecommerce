@@ -42,12 +42,12 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 @Entity
 @Table(name = "ec_role_permission")
-public class RolePermission extends BaseEntity implements Serializable{
+public class ECRolePermission extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	protected Role role;
-	protected Permission permission;
+	protected ECRole role;
+	protected ECPermission permission;
 	protected String rights;
 	protected Instant startDate;
 	protected Instant endDate;
@@ -57,14 +57,14 @@ public class RolePermission extends BaseEntity implements Serializable{
 	protected Long permissionId;
 
 	//Constructor
-	public RolePermission(){}
+	public ECRolePermission(){}
 	
-	public RolePermission(Role role, Permission permission) {
+	public ECRolePermission(ECRole role, ECPermission permission) {
 		this.setRole(role);
 		this.setPermission(permission);
 	}
 	
-	public RolePermission(Long id, boolean active, String rights, Instant startDate, Instant endDate, Long permissionId) {
+	public ECRolePermission(Long id, boolean active, String rights, Instant startDate, Instant endDate, Long permissionId) {
 		this.setId(id);
 		this.setActive(active);
 		this.setRights(rights);
@@ -73,7 +73,7 @@ public class RolePermission extends BaseEntity implements Serializable{
 		this.setPermissionId(permissionId);
 	}
 	
-	public RolePermission(boolean active, boolean archive, boolean locked, Instant startDate, Instant endDate, String rights, Role role, Permission permission) {
+	public ECRolePermission(boolean active, boolean archive, boolean locked, Instant startDate, Instant endDate, String rights, ECRole role, ECPermission permission) {
 		this.setActive(active);
 		this.setActive(active);
 		this.setLocked(locked);
@@ -86,22 +86,22 @@ public class RolePermission extends BaseEntity implements Serializable{
 
 	// Methods
 	@JsonIgnore
-	@ManyToOne(targetEntity = Role.class)
+	@ManyToOne(targetEntity = ECRole.class)
 	@JoinColumn(name = "role_id")
-	public Role getRole() {
+	public ECRole getRole() {
 		return role;
 	}
-	public void setRole(Role role) {
+	public void setRole(ECRole role) {
 		this.role = role;
 	}
 	
 	@JsonIgnore
-	@ManyToOne(targetEntity = Permission.class)
+	@ManyToOne(targetEntity = ECPermission.class)
 	@JoinColumn(name = "permission_id")
-	public Permission getPermission() {
+	public ECPermission getPermission() {
 		return permission;
 	}
-	public void setPermission(Permission permission) {
+	public void setPermission(ECPermission permission) {
 		this.permission = permission;
 	}
 	

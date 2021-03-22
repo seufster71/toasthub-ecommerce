@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.cart;
+package org.toasthub.ecommerce.member;
 
-import org.toasthub.ecommerce.model.Attachment;
-import org.toasthub.ecommerce.model.AttachmentMeta;
-import org.toasthub.ecommerce.model.BaseDao;
+import org.toasthub.ecommerce.model.ECMember;
+import org.toasthub.security.model.User;
 
-public interface CartDao extends BaseDao {
-    
-    public Attachment getAttachment(AttachmentMeta attachmentMeta) throws Exception;
-    public AttachmentMeta getAttachment(Long id) throws Exception;
-    
-	public long totalCartItems(long userId);
+public interface ECMemberDao {
+	
+    public ECMember getMember(User user) throws Exception;
+
 }

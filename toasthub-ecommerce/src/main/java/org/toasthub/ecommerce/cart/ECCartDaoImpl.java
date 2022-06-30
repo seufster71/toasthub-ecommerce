@@ -83,12 +83,12 @@ public class ECCartDaoImpl implements ECCartDao {
 	public void delete(RestRequest request, RestResponse response) throws Exception {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
 			if (request.containsParam(GlobalConstant.HARDDELETE) && !"YES".equals(request.getParam(GlobalConstant.HARDDELETE))) {
-				ECCartItem cartItem = (ECCartItem) entityManagerDataSvc.getInstance().getReference(ECCartItem.class,  new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECCartItem cartItem = (ECCartItem) entityManagerDataSvc.getInstance().getReference(ECCartItem.class,  Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
 				entityManagerDataSvc.getInstance().remove(cartItem);
 				
 			} else {
 				// soft delete cart items
-				ECCartItem cartItem = entityManagerDataSvc.getInstance().find(ECCartItem.class,new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECCartItem cartItem = entityManagerDataSvc.getInstance().find(ECCartItem.class,Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
 				cartItem.setActive(false);
 				cartItem.setArchive(true);
 				entityManagerDataSvc.getInstance().merge(cartItem);
@@ -272,7 +272,7 @@ public class ECCartDaoImpl implements ECCartDao {
 			String queryStr = "SELECT DISTINCT i FROM ECCartItem AS i INNER JOIN FETCH i.item AS item LEFT JOIN FETCH item.attachments WHERE i.active=true AND i.id = :id";
 			Query query = entityManagerDataSvc.getInstance().createQuery(queryStr);
 		
-			query.setParameter("id", new Long((Integer) request.getParam(GlobalConstant.ITEMID)));
+			query.setParameter("id", Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
 			ECCartItem cartItem = (ECCartItem) query.getSingleResult();
 			
 			response.addParam(GlobalConstant.ITEM, cartItem);

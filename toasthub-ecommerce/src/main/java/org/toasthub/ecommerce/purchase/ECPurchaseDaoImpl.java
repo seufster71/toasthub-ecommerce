@@ -346,9 +346,9 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 	public List<String> processPurchaseRequest(ECPurchaseRequest[] purchaseRequests,RestResponse response, ECMember user) throws Exception {
 		List<String> items = new ArrayList<String>();
 	/*	for(PurchaseRequest purchaseRequest:purchaseRequests) {
-			long cartItemId = new Long((long)purchaseRequest.getId());
+			long cartItemId = Long.valueOf((long)purchaseRequest.getId());
 			CartItem cartItem = entityManager.find(CartItem.class,cartItemId);
-			long itemId = new Long(cartItem.getItem().getId());
+			long itemId = Long.valueOf(cartItem.getItem().getId());
 			StoreItem storeItem = entityManager.find(StoreItem.class,itemId);
 			int storeItemQuantity= storeItem.getQuantity();
 			if(UserRef.getUserPoints() >= purchaseRequest.getTotalCost()) {

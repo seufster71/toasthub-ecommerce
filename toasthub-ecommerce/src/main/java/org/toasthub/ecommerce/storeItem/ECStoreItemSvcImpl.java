@@ -185,7 +185,7 @@ public class ECStoreItemSvcImpl implements ECStoreItemSvc, ServiceProcessor {
 	@Override
 	public void deleteAttachment(RestRequest request, RestResponse response) {
 		try {
-			storeDao.deleteAttachment(new Long((int)request.getParam("ATTACHMENT_ID")));
+			storeDao.deleteAttachment(Long.valueOf((int)request.getParam("ATTACHMENT_ID")));
 			response.setStatus("Delete successful");
 		} catch (Exception e) {
 			utilSvc.addStatus(RestResponse.ERROR, RestResponse.EXECUTIONFAILED, prefCacheUtil.getPrefText("GLOBAL_SERVICE", "GLOBAL_SERVICE_EXECUTION_FAIL",prefCacheUtil.getLang(request)), response);

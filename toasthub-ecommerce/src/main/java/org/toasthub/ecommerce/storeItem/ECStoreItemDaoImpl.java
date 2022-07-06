@@ -140,7 +140,7 @@ public class ECStoreItemDaoImpl implements ECStoreItemDao {
 			String queryStr = "SELECT x FROM ECStoreItem AS x WHERE x.id =:id";
 			Query query = entityManagerDataSvc.getInstance().createQuery(queryStr);
 		
-			query.setParameter("id", Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
+			query.setParameter("id", request.getParamLong(GlobalConstant.ITEMID));
 			ECStoreItem storeItem = (ECStoreItem) query.getSingleResult();
 			
 			response.addParam(GlobalConstant.ITEM, storeItem);
@@ -283,12 +283,12 @@ public class ECStoreItemDaoImpl implements ECStoreItemDao {
 	public void delete(RestRequest request, RestResponse response) {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
 			if (request.containsParam(GlobalConstant.HARDDELETE) && !"YES".equals(request.getParam(GlobalConstant.HARDDELETE))) {
-				ECStoreItem storeItem = (ECStoreItem) entityManagerDataSvc.getInstance().getReference(ECStoreItem.class,  Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECStoreItem storeItem = (ECStoreItem) entityManagerDataSvc.getInstance().getReference(ECStoreItem.class, request.getParamLong(GlobalConstant.ITEMID));
 				entityManagerDataSvc.getInstance().remove(storeItem);
 				
 			} else {
 				// soft delete store items
-				ECStoreItem storeItem = entityManagerDataSvc.getInstance().find(ECStoreItem.class,Long.valueOf((Integer) request.getParam(GlobalConstant.ITEMID)));
+				ECStoreItem storeItem = entityManagerDataSvc.getInstance().find(ECStoreItem.class,request.getParamLong(GlobalConstant.ITEMID));
 				storeItem.setActive(false);
 				storeItem.setArchive(true);
 				entityManagerDataSvc.getInstance().merge(storeItem);

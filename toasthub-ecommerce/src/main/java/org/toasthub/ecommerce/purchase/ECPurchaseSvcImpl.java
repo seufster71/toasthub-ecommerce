@@ -43,7 +43,7 @@ public class ECPurchaseSvcImpl implements ECPurchaseSvc {
 	public void approve(RestRequest request, RestResponse response) {
 	/*	if (request.containsParam("PURCHASE_ITEM_ID")) {
 			try {
-				PurchaseRequest req = purchaseDao.approve(Long.valueOf((int) request.getParam("PURCHASE_ITEM_ID")));
+				PurchaseRequest req = purchaseDao.approve(request.getParamLong("PURCHASE_ITEM_ID"));
 				response.setStatus(GlobalConstants.SUCCESSFUL);
 
 			} catch (Exception e) {
@@ -61,7 +61,7 @@ public class ECPurchaseSvcImpl implements ECPurchaseSvc {
 	public void deny(RestRequest request, RestResponse response) {
 		/*if (request.containsParam("PURCHASE_ITEM_ID")) {
 			try {
-				PurchaseRequest req = purchaseDao.deny(Long.valueOf((int) request.getParam("PURCHASE_ITEM_ID")));
+				PurchaseRequest req = purchaseDao.deny(request.getParamLong("PURCHASE_ITEM_ID"));
 				String denyReason = (String) request.getParam("DENY_REASON");
 				response.setStatus(GlobalConstants.SUCCESSFUL);
 				MailSvcImpl mailSvcImpl = new MailSvcImpl();

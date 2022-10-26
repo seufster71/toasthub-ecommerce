@@ -2,18 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>org.toasthub</groupId>
+	<artifactId>toasthub-ecommerce</artifactId>
+	<version>1.0-GA</version>
+	<name>toasthub-ecommerce</name>
+	<packaging>jar</packaging>
+	
+	<description>E-Commerce</description>
+	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.6</version>
+		<version>2.6.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.toasthub</groupId>
-	<artifactId>toasthub-ecommerce</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<name>toasthub-ecommerce</name>
-	<description>E-Commerce</description>
-	<packaging>jar</packaging>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,26 +44,19 @@
 		<dependency>
 			<groupId>org.toasthub</groupId>
 			<artifactId>toasthub-member</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0-GA</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-	                <execution>
-	                    <goals>
-	                        <goal>repackage</goal>
-	                    </goals>
-	                    <configuration>
-	                        <classifier>exec</classifier>
-	                    </configuration>
-	                </execution>
-            	</executions>
-			</plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-surefire-plugin</artifactId>
+        		<configuration>
+          			<skipTests>true</skipTests>
+        		</configuration>
+      		</plugin>
 		</plugins>
 	</build>
 

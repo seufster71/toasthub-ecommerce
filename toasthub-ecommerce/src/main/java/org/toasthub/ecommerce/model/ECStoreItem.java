@@ -20,14 +20,14 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import org.toasthub.core.general.api.View;
 
@@ -43,28 +43,34 @@ public class ECStoreItem extends ECBaseEntity {
 	protected ECStore store;
 	protected String name;
 	protected String description;
-	protected int quantity;
+	protected BigDecimal price;
+	protected BigDecimal priceCrypto;
+	protected BigDecimal discountPercent;
+	protected BigDecimal discountValue;
+	protected BigDecimal discountCryptoValue;
+	protected LocalDate discountStartDate;
+	protected LocalDate discountEndDate;
+	protected int inventoryCount;
 	protected String size;
 	protected String color;
 	protected String category;
-	protected boolean available;
-	protected LocalDate availableDate;
-	protected LocalDate disableDate;
+	protected LocalDate availableStartDate;
+	protected LocalDate availableEndDate;
 	protected Set<ECAttachmentMeta> attachments;
 	
 	// constructors
 	public ECStoreItem() {}
 	
-	public ECStoreItem(Long id, String name, int quantity) {
+	public ECStoreItem(Long id, String name, int inventoryCount) {
 		this.setId(id);
 		this.setName(name);
-		this.setQuantity(quantity);
+		this.setInventoryCount(inventoryCount);
 	}
 	
-	public ECStoreItem(Long id, String name, int quantity, String size, String color) {
+	public ECStoreItem(Long id, String name, int inventoryCount, String size, String color) {
 		this.setId(id);
 		this.setName(name);
-		this.setQuantity(quantity);
+		this.setInventoryCount(inventoryCount);
 		this.setSize(size);
 		this.setColor(color);
 	}
@@ -99,14 +105,77 @@ public class ECStoreItem extends ECBaseEntity {
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "quantity")
-	public int getQuantity() {
-		return quantity;
+	@Column(name = "price")
+	public BigDecimal getPrice() {
+		return price;
 	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
-	
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "price_crypto")
+	public BigDecimal getPriceCrypto() {
+		return priceCrypto;
+	}
+	public void setPriceCrypto(BigDecimal priceCrypto) {
+		this.priceCrypto = priceCrypto;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "discount_percent")
+	public BigDecimal getDiscountPercent() {
+		return discountPercent;
+	}
+	public void setDiscountPercent(BigDecimal discountPercent) {
+		this.discountPercent = discountPercent;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "discount_value")
+	public BigDecimal getDiscountValue() {
+		return discountValue;
+	}
+	public void setDiscountValue(BigDecimal discountValue) {
+		this.discountValue = discountValue;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "discount_crypt_value")
+	public BigDecimal getDiscountCryptoValue() {
+		return discountCryptoValue;
+	}
+	public void setDiscountCryptoValue(BigDecimal discountCryptoValue) {
+		this.discountCryptoValue = discountCryptoValue;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "discount_start_date")
+	public LocalDate getDiscountStartDate() {
+		return discountStartDate;
+	}
+	public void setDiscountStartDate(LocalDate discountStartDate) {
+		this.discountStartDate = discountStartDate;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "discount_end_date")
+	public LocalDate getDiscountEndDate() {
+		return discountEndDate;
+	}
+	public void setDiscountEndDate(LocalDate discountEndDate) {
+		this.discountEndDate = discountEndDate;
+	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "inventory_count")
+	public int getInventoryCount() {
+		return inventoryCount;
+	}
+	public void setInventoryCount(int inventoryCount) {
+		this.inventoryCount = inventoryCount;
+	}
+
 	@JsonView({View.Member.class,View.Admin.class})
 	@Column(name = "size")
 	public String getSize() {
@@ -135,30 +204,21 @@ public class ECStoreItem extends ECBaseEntity {
 	}
 	
 	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "available")
-	public boolean isAvailable() {
-		return available;
+	@Column(name = "available_start_date")
+	public LocalDate getAvailableStartDate() {
+		return availableStartDate;
 	}
-	public void setAvailable(boolean available) {
-		this.available = available;
-	}
-	
-	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "available_date")
-	public LocalDate getAvailableDate() {
-		return availableDate;
-	}
-	public void setAvailableDate(LocalDate availableDate) {
-		this.availableDate = availableDate;
+	public void setAvailableStartDate(LocalDate availableStartDate) {
+		this.availableStartDate = availableStartDate;
 	}
 
 	@JsonView({View.Member.class,View.Admin.class})
-	@Column(name = "disable_date")
-	public LocalDate getDisableDate() {
-		return disableDate;
+	@Column(name = "available_end_date")
+	public LocalDate getAvailableEndDate() {
+		return availableEndDate;
 	}
-	public void setDisableDate(LocalDate disableDate) {
-		this.disableDate = disableDate;
+	public void setAvailableEndDate(LocalDate availableEndDate) {
+		this.availableEndDate = availableEndDate;
 	}
 
 	@JsonView({View.Member.class,View.Admin.class})

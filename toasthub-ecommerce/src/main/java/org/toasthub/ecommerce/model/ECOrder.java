@@ -1,24 +1,9 @@
-/*
- * Copyright (C) 2023 The ToastHub Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.toasthub.ecommerce.model;
 
 import java.io.Serializable;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -31,15 +16,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
-@Table(name = "ec_cart")
-public class ECCart extends ECBaseEntity implements Serializable {
+@Table(name = "ec_order")
+public class ECOrder extends ECBaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	protected ECMember member;
 	protected ECStore store;
+	protected String workflowStatus;
+	
 
-	public ECCart(){
+	
+	public ECOrder(){
 	}
 	
 	// Setters/Getters
@@ -52,9 +40,9 @@ public class ECCart extends ECBaseEntity implements Serializable {
 	public void setMember(ECMember member) {
 		this.member = member;
 	}
-
+	
 	@JsonView({View.Member.class,View.Admin.class})
-	@ManyToOne(targetEntity = ECStore.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ECCurrency.class, cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_id")
 	public ECStore getStore() {
 		return store;
@@ -62,6 +50,16 @@ public class ECCart extends ECBaseEntity implements Serializable {
 	public void setStore(ECStore store) {
 		this.store = store;
 	}
+
+	@JsonView({View.Member.class,View.Admin.class})
+	@Column(name = "workflow_status")
+	public String getWorkflowStatus() {
+		return workflowStatus;
+	}
+	public void setWorkflowStatus(String workflowStatus) {
+		this.workflowStatus = workflowStatus;
+	}
+	
 	
 	
 }

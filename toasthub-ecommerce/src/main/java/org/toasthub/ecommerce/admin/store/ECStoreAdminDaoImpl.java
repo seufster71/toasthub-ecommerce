@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.store;
+package org.toasthub.ecommerce.admin.store;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -35,10 +35,11 @@ import org.toasthub.core.preference.model.PrefCacheUtil;
 import org.toasthub.ecommerce.model.ECAttachment;
 import org.toasthub.ecommerce.model.ECAttachmentMeta;
 import org.toasthub.ecommerce.model.ECStore;
+import org.toasthub.ecommerce.store.ECStoreDaoImpl;
 
-@Repository("ECStoreDao")
+@Repository("ECStoreAdminDao")
 @Transactional("TransactionManagerData")
-public class ECStoreDaoImpl implements ECStoreDao {
+public class ECStoreAdminDaoImpl extends ECStoreDaoImpl implements ECStoreAdminDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;

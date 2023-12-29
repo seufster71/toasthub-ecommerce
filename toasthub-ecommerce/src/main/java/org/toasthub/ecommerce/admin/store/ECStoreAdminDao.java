@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.storeItem;
+package org.toasthub.ecommerce.admin.store;
 
 import org.toasthub.ecommerce.model.ECAttachment;
 import org.toasthub.ecommerce.model.ECAttachmentMeta;
-import org.toasthub.ecommerce.model.ECBaseDao;
+import org.toasthub.ecommerce.store.ECStoreDao;
 
-public interface ECStoreItemDao extends ECBaseDao {
+public interface ECStoreAdminDao extends ECStoreDao {
 	
     public ECAttachment getAttachment(ECAttachmentMeta attachmentMeta) throws Exception;
     public ECAttachmentMeta getAttachment(Long id) throws Exception;
     public void deleteAttachment(Long id) throws Exception;
     public ECAttachmentMeta saveAttachment(ECAttachmentMeta attachmentMeta) throws Exception;
     
-    public int getInventory(Long storeItemId);
 }

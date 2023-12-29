@@ -21,7 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Query;
+import jakarta.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -329,9 +329,9 @@ public class ECStoreItemDaoImpl implements ECStoreItemDao {
 	}
 
 	@Override
-	public int getQuantity(Long storeItemId) {
+	public int getInventory(Long storeItemId) {
 		String HQLQuery = "SELECT new ECStoreItem(s.id, s.title, s.quantity) FROM ECStoreItem AS s WHERE s.id=:id ";
 		ECStoreItem i = (ECStoreItem) entityManagerDataSvc.getInstance().createQuery(HQLQuery).setParameter("id", storeItemId).getSingleResult();
-		return i.getQuantity();
+		return i.getInventoryCount();
 	}
 }

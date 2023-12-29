@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The ToastHub Project
+ * Copyright (C) 2023 The ToastHub Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,39 +16,41 @@
 
 package org.toasthub.ecommerce.model;
 
-
-import java.math.BigDecimal;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "ec_cart_item")
-public class ECCartItem extends ECBaseEntity{
+public class ECCartItem extends ECBaseEntity {
+	
 	private static final long serialVersionUID = 1L;
 	
+	protected ECCart cart;
 	protected ECStoreItem item;
 	protected int quantity;
-	protected BigDecimal totalPrice;
-	protected BigDecimal totalPriceCrypto;
-	protected Long userId;
 	
-	// Transient
-	protected int availableQuantity;
+	protected int inventory;
 
 	// Constructor
 	public ECCartItem() {
 		super();
 	}
 
-
+	// Setters and Getters
+	@ManyToOne(targetEntity = ECCart.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@JoinColumn(name = "cart_id") 
+	public ECCart getCart() {
+		return cart;
+	}
+	public void setCart(ECCart cart) {
+		this.cart = cart;
+	}
 
 	@ManyToOne(targetEntity = ECStoreItem.class, cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_item_id") 
@@ -67,37 +69,13 @@ public class ECCartItem extends ECBaseEntity{
 		this.quantity = quantity;
 	}
 
-	@Column(name = "total_price")
-	public BigDecimal getTotalPrice() {
-		return totalPrice;
-	}
-	public void setTotalPrice(BigDecimal totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-	
-	@Column(name = "total_price_crypto")
-	public BigDecimal getTotalPriceCrypto() {
-		return totalPriceCrypto;
-	}
-	public void setTotalPriceCrypto(BigDecimal totalPriceCrypto) {
-		this.totalPriceCrypto = totalPriceCrypto;
-	}
-
-	@Column(name = "user_ref_id") 
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-	
 	@Transient
-	public int getAvailableQuantity() {
-		return availableQuantity;
+	public int getInventory() {
+		return inventory;
 	}
-	public void setAvailableQuantity(int availableQuantity) {
-		this.availableQuantity = availableQuantity;
+	public void setInventory(int inventory) {
+		this.inventory = inventory;
 	}
-
-
+	
+	
 }

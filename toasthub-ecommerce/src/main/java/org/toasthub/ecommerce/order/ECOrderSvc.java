@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 The ToastHub Project
+ * Copyright (C) 2023 The ToastHub Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.purchase;
+package org.toasthub.ecommerce.order;
 
 import org.toasthub.core.general.model.RestRequest;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.ecommerce.model.ECBaseSvc;
 
-public interface ECPurchaseSvc extends ECBaseSvc {
-	public void approve(RestRequest request,RestResponse response);
-	public void deny(RestRequest request,RestResponse response);
+public interface ECOrderSvc extends ECBaseSvc {
+	
 	public void pendingList(RestRequest request,RestResponse response);
 	public void completedList(RestRequest request,RestResponse response);
 	
-	public void addPurchaseRequest(RestRequest request, RestResponse response);
 	public void pendingStats(RestRequest request, RestResponse response);
 	public void completedStats(RestRequest request, RestResponse response);
 	
-	public void memberPendingList(RestRequest request,RestResponse response);
-	public void memberCompletedList(RestRequest request,RestResponse response);
 }

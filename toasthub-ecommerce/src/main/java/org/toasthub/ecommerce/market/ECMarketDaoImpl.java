@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.store;
+package org.toasthub.ecommerce.market;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -34,11 +34,11 @@ import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.preference.model.PrefCacheUtil;
 import org.toasthub.ecommerce.model.ECAttachment;
 import org.toasthub.ecommerce.model.ECAttachmentMeta;
-import org.toasthub.ecommerce.model.ECStore;
+import org.toasthub.ecommerce.model.ECMarket;
 
-@Repository("ECStoreDao")
+@Repository("ECMarketDao")
 @Transactional("TransactionManagerData")
-public class ECStoreDaoImpl implements ECStoreDao {
+public class ECMarketDaoImpl implements ECMarketDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
@@ -50,7 +50,7 @@ public class ECStoreDaoImpl implements ECStoreDao {
 
 	@Override
 	public void itemCount(RestRequest request, RestResponse response) {
-		String queryStr = "SELECT COUNT(DISTINCT x) FROM ECStore as x ";
+		String queryStr = "SELECT COUNT(DISTINCT x) FROM ECMarket as x ";
 		boolean and = false;
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
 			if (!and) { queryStr += " WHERE "; }
@@ -73,17 +73,12 @@ public class ECStoreDaoImpl implements ECStoreDao {
 			String lookupStr = "";
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_TITLE")){
 						if (or) { lookupStr += " OR "; }
-						lookupStr += "x.name LIKE :titleValue"; 
+						lookupStr += "x.title LIKE :titleValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
-						if (or) { lookupStr += " OR "; }
-						lookupStr += "x.name LIKE :categoryValue"; 
-						or = true;
-					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_STATUS")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.active LIKE :statusValue"; 
 						or = true;
@@ -109,13 +104,10 @@ public class ECStoreDaoImpl implements ECStoreDao {
 		if (searchCriteria != null){
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {  
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_TITLE")){
 						query.setParameter("titleValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
-						query.setParameter("categoryValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
-					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_STATUS")){
 						if ("active".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
 							query.setParameter("statusValue", true);
 						} else if ("disabled".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
@@ -137,13 +129,13 @@ public class ECStoreDaoImpl implements ECStoreDao {
 	@Override
 	public void item(RestRequest request, RestResponse response) {
 		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
-			String queryStr = "SELECT x FROM ECStore AS x WHERE x.id =:id";
+			String queryStr = "SELECT x FROM ECMarket AS x WHERE x.id =:id";
 			Query query = entityManagerDataSvc.getInstance().createQuery(queryStr);
 		
 			query.setParameter("id", request.getParamLong(GlobalConstant.ITEMID));
-			ECStore storeItem = (ECStore) query.getSingleResult();
+			ECMarket marketItem = (ECMarket) query.getSingleResult();
 			
-			response.addParam(GlobalConstant.ITEM, storeItem);
+			response.addParam(GlobalConstant.ITEM, marketItem);
 		} else {
 			utilSvc.addStatus(RestResponse.ERROR, RestResponse.EXECUTIONFAILED, prefCacheUtil.getPrefText("GLOBAL_SERVICE", "GLOBAL_SERVICE_MISSING_ID",prefCacheUtil.getLang(request)), response);
 		}
@@ -151,7 +143,7 @@ public class ECStoreDaoImpl implements ECStoreDao {
 
 	@Override
 	public void items(RestRequest request, RestResponse response) {
-		String queryStr = "SELECT DISTINCT x FROM ECStore AS x ";
+		String queryStr = "SELECT DISTINCT x FROM ECMarket AS x ";
 		
 		boolean and = false;
 		if (request.containsParam(GlobalConstant.ACTIVE)) {
@@ -176,17 +168,12 @@ public class ECStoreDaoImpl implements ECStoreDao {
 			String lookupStr = "";
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_TITLE")){
 						if (or) { lookupStr += " OR "; }
-						lookupStr += "x.name LIKE :titleValue"; 
+						lookupStr += "x.title LIKE :titleValue"; 
 						or = true;
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
-						if (or) { lookupStr += " OR "; }
-						lookupStr += "x.name LIKE :categoryValue"; 
-						or = true;
-					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_STATUS")){
 						if (or) { lookupStr += " OR "; }
 						lookupStr += "x.active LIKE :statusValue"; 
 						or = true;
@@ -218,17 +205,12 @@ public class ECStoreDaoImpl implements ECStoreDao {
 			
 			for (LinkedHashMap<String,String> item : orderCriteria) {
 				if (item.containsKey(GlobalConstant.ORDERCOLUMN) && item.containsKey(GlobalConstant.ORDERDIR)) {
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_TITLE")){
+					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_MARKET_TABLE_TITLE")){
 						if (comma) { orderItems.append(","); }
 						orderItems.append("x.title ").append(item.get(GlobalConstant.ORDERDIR));
 						comma = true;
 					}
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
-						if (comma) { orderItems.append(","); }
-						orderItems.append("x.category ").append(item.get(GlobalConstant.ORDERDIR));
-						comma = true;
-					}
-					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_STORE_TABLE_STATUS")){
+					if (item.get(GlobalConstant.ORDERCOLUMN).equals("EC_MARKET_TABLE_STATUS")){
 						if (comma) { orderItems.append(","); }
 						orderItems.append("x.active ").append(item.get(GlobalConstant.ORDERDIR));
 						comma = true;
@@ -252,13 +234,10 @@ public class ECStoreDaoImpl implements ECStoreDao {
 		if (searchCriteria != null){
 			for (LinkedHashMap<String,String> item : searchCriteria) {
 				if (item.containsKey(GlobalConstant.SEARCHVALUE) && !"".equals(item.get(GlobalConstant.SEARCHVALUE)) && item.containsKey(GlobalConstant.SEARCHCOLUMN)) {  
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_TITLE")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_TITLE")){
 						query.setParameter("titleValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
 					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_CATEGORY")){
-						query.setParameter("categoryValue", "%"+((String)item.get(GlobalConstant.SEARCHVALUE)).toLowerCase()+"%");
-					}
-					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_STORE_TABLE_STATUS")){
+					if (item.get(GlobalConstant.SEARCHCOLUMN).equals("EC_MARKET_TABLE_STATUS")){
 						if ("active".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
 							query.setParameter("statusValue", true);
 						} else if ("disabled".equalsIgnoreCase((String)item.get(GlobalConstant.SEARCHVALUE))) {
@@ -273,35 +252,20 @@ public class ECStoreDaoImpl implements ECStoreDao {
 			query.setMaxResults((Integer) request.getParam(GlobalConstant.LISTLIMIT));
 		}
 		@SuppressWarnings("unchecked")
-		List<ECStore> storeItems = query.getResultList();
+		List<ECMarket> marketItems = query.getResultList();
 
-		response.addParam(GlobalConstant.ITEMS, storeItems);
+		response.addParam(GlobalConstant.ITEMS, marketItems);
 		
 	}
 
 	@Override
 	public void delete(RestRequest request, RestResponse response) {
-		if (request.containsParam(GlobalConstant.ITEMID) && !"".equals(request.getParam(GlobalConstant.ITEMID))) {
-			if (request.containsParam(GlobalConstant.HARDDELETE) && !"YES".equals(request.getParam(GlobalConstant.HARDDELETE))) {
-				ECStore storeItem = (ECStore) entityManagerDataSvc.getInstance().getReference(ECStore.class, request.getParamLong(GlobalConstant.ITEMID));
-				entityManagerDataSvc.getInstance().remove(storeItem);
-				
-			} else {
-				// soft delete store items
-				ECStore storeItem = entityManagerDataSvc.getInstance().find(ECStore.class, request.getParamLong(GlobalConstant.ITEMID));
-				storeItem.setActive(false);
-				storeItem.setArchive(true);
-				entityManagerDataSvc.getInstance().merge(storeItem);
-			}
-		} else {
-			utilSvc.addStatus(RestResponse.ERROR, RestResponse.ACTIONFAILED, "Missing ID", response);
-		}
+		
 	}
 
 	@Override
 	public void save(RestRequest request, RestResponse response) {
-		ECStore store = (ECStore) request.getParam(GlobalConstant.ITEM);
-		entityManagerDataSvc.getInstance().merge(store);
+	
 	}
 
 	@Override

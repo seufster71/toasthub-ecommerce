@@ -6,15 +6,15 @@
 	<groupId>org.toasthub</groupId>
 	<artifactId>toasthub-ecommerce</artifactId>
 	<version>1.0-GA</version>
-	<name>toasthub-ecommerce</name>
 	<packaging>jar</packaging>
 	
+	<name>toasthub-ecommerce</name>
 	<description>E-Commerce</description>
 	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.10</version>
+		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	

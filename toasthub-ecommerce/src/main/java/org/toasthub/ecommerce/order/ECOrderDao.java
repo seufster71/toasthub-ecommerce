@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.purchase;
+package org.toasthub.ecommerce.order;
 
 import java.util.List;
 import java.util.Map;
@@ -22,25 +22,23 @@ import java.util.Map;
 import org.toasthub.core.general.model.OrderCriteria;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.general.model.SearchCriteria;
-import org.toasthub.ecommerce.model.ECPurchaseRequest;
 import org.toasthub.ecommerce.model.ECStoreItem;
 import org.toasthub.ecommerce.model.ECMember;
+import org.toasthub.ecommerce.model.ECOrder;
 
-public interface ECPurchaseDao {
-	public ECPurchaseRequest approve(Long id) throws Exception;
-	public ECPurchaseRequest deny(Long id) throws Exception;
+public interface ECOrderDao {
 	public Long pendingCount(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria) throws Exception;
-	public List<ECPurchaseRequest> pendingList(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
+	public List<ECOrder> pendingList(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
 	public Long completedCount(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria) throws Exception;
-	public List<ECPurchaseRequest> completedList(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
-	public ECPurchaseRequest create(ECPurchaseRequest purchaseRequest, ECMember user, ECStoreItem storeItem) throws Exception;
+	public List<ECOrder> completedList(List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
+	public ECOrder create(ECOrder purchaseRequest, ECMember user, ECStoreItem storeItem) throws Exception;
 	public Long pendingStats();
 	public List<Map<String,Long>> completedStats();
 	
 	public Long memberPendingCount(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria) throws Exception;
-	public List<ECPurchaseRequest> memberPendingList(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
+	public List<ECOrder> memberPendingList(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
 	public Long memberCompletedCount(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria) throws Exception;
-	public List<ECPurchaseRequest> memberCompletedList(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
+	public List<ECOrder> memberCompletedList(ECMember user,List<OrderCriteria> orderCriteria,SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception;
 	
-	public List<String> processPurchaseRequest(ECPurchaseRequest[] purchaseRequests,RestResponse response, ECMember pepUser) throws Exception;
+	public List<String> processPurchaseRequest(ECOrder[] purchaseRequests,RestResponse response, ECMember pepUser) throws Exception;
 }

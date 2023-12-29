@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.toasthub.ecommerce.purchase;
+package org.toasthub.ecommerce.order;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Query;
-import javax.transaction.Transactional;
+import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,54 +31,25 @@ import org.toasthub.core.common.EntityManagerDataSvc;
 import org.toasthub.core.general.model.OrderCriteria;
 import org.toasthub.core.general.model.RestResponse;
 import org.toasthub.core.general.model.SearchCriteria;
-import org.toasthub.ecommerce.model.ECPurchaseRequest;
 import org.toasthub.ecommerce.model.ECStoreItem;
 import org.toasthub.ecommerce.model.ECMember;
+import org.toasthub.ecommerce.model.ECOrder;
 
 
 @Transactional(rollbackOn = Exception.class)
-@Repository("PurchaseDao")
-public class ECPurchaseDaoImpl implements ECPurchaseDao {
+@Repository("ECOrderDao")
+public class ECOrderDaoImpl implements ECOrderDao {
 
 	@Autowired
 	protected EntityManagerDataSvc entityManagerDataSvc;
 
 	@Override
-	public ECPurchaseRequest create(ECPurchaseRequest purchaseRequest, ECMember user, ECStoreItem storeItem) throws Exception {
+	public ECOrder create(ECOrder purchaseRequest, ECMember user, ECStoreItem storeItem) throws Exception {
 		purchaseRequest = entityManagerDataSvc.getInstance().merge(purchaseRequest);
 		user = entityManagerDataSvc.getInstance().merge(user);
 		storeItem = entityManagerDataSvc.getInstance().merge(storeItem);
 
 		return entityManagerDataSvc.getInstance().merge(purchaseRequest);
-	}
-	@Override
-	public ECPurchaseRequest approve(Long id) throws Exception {
-		ECPurchaseRequest request = entityManagerDataSvc.getInstance().find(ECPurchaseRequest.class, id);
-		request.setApproved(true);
-		request.setDeclined(false);
-		request.getRequester();
-		
-		return entityManagerDataSvc.getInstance().merge(request);
-	}
-
-	@Override
-	public ECPurchaseRequest deny(Long id) throws Exception {
-		ECPurchaseRequest request = entityManagerDataSvc.getInstance().find(ECPurchaseRequest.class, id);
-		request.setApproved(false);
-		request.setDeclined(true);
-
-		// return user points
-	//	UserRef user = request.getRequester();
-	//	int total = user.getUserPoints() + (request.getCost() * request.getQuantity());
-	//	user.setUserPoints(total);
-	
-		// replace item quantity
-		int quantity = request.getItem().getQuantity() + request.getQuantity();
-		request.getItem().setQuantity(quantity);
-
-		entityManagerDataSvc.getInstance().merge(request);
-	//	entityManager.merge(user);
-		return request;
 	}
 
 	@Override
@@ -106,7 +77,7 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 	}
 
 	@Override
-	public List<ECPurchaseRequest> pendingList(List<OrderCriteria> orderCriteria, SearchCriteria searchCriteria,
+	public List<ECOrder> pendingList(List<OrderCriteria> orderCriteria, SearchCriteria searchCriteria,
 			Integer listStart, Integer listLimit) throws Exception {
 		String HQLQuery = "SELECT DISTINCT r FROM ECPurchaseRequest AS r WHERE r.declined=false AND r.approved=false ";
 		if (searchCriteria != null && searchCriteria.getSearchValue() != null && !"".equals(searchCriteria.getSearchValue()) 
@@ -133,11 +104,11 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 			query.setMaxResults(listLimit);
 		}
 		@SuppressWarnings("unchecked")
-		List<ECPurchaseRequest> resultList = query.getResultList();
+		List<ECOrder> resultList = query.getResultList();
 		// add size and color
-		for (ECPurchaseRequest p : resultList) {
-			p.setItemSize(p.getItem().getSize());
-			p.setItemColor(p.getItem().getColor());
+		for (ECOrder p : resultList) {
+		//	p.setItemSize(p.getItem().getSize());
+		//	p.setItemColor(p.getItem().getColor());
 		}
 		return resultList;
 	}
@@ -167,7 +138,7 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 	}
 
 	@Override
-	public List<ECPurchaseRequest> completedList(List<OrderCriteria> orderCriteria, SearchCriteria searchCriteria,
+	public List<ECOrder> completedList(List<OrderCriteria> orderCriteria, SearchCriteria searchCriteria,
 			Integer listStart, Integer listLimit) throws Exception {
 		String HQLQuery = "SELECT DISTINCT r FROM ECPurchaseRequest AS r WHERE (r.declined=true OR r.approved=true) ";
 		if (searchCriteria != null && searchCriteria.getSearchValue() != null && !"".equals(searchCriteria.getSearchValue()) 
@@ -194,11 +165,11 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 			query.setMaxResults(listLimit);
 		}
 		@SuppressWarnings("unchecked")
-		List<ECPurchaseRequest> resultList = query.getResultList();
+		List<ECOrder> resultList = query.getResultList();
 		// add size and color
-		for (ECPurchaseRequest p : resultList) {
-			p.setItemSize(p.getItem().getSize());
-			p.setItemColor(p.getItem().getColor());
+		for (ECOrder p : resultList) {
+		//	p.setItemSize(p.getItem().getSize());
+		//	p.setItemColor(p.getItem().getColor());
 		}
 		return resultList;
 	}
@@ -228,7 +199,7 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 		return count;
 	}
 	@Override
-	public List<ECPurchaseRequest> memberPendingList(ECMember user, List<OrderCriteria> orderCriteria,
+	public List<ECOrder> memberPendingList(ECMember user, List<OrderCriteria> orderCriteria,
 			SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception {
 		String HQLQuery = "SELECT DISTINCT r FROM ECPurchaseRequest AS r WHERE r.declined=false AND r.approved=false AND r.requester.id = :id";
 		if (searchCriteria != null && searchCriteria.getSearchValue() != null && !"".equals(searchCriteria.getSearchValue()) 
@@ -256,11 +227,11 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 			query.setMaxResults(listLimit);
 		}
 		@SuppressWarnings("unchecked")
-		List<ECPurchaseRequest> resultList = query.getResultList();
+		List<ECOrder> resultList = query.getResultList();
 		// add size and color
-		for (ECPurchaseRequest p : resultList) {
-			p.setItemSize(p.getItem().getSize());
-			p.setItemColor(p.getItem().getColor());
+		for (ECOrder p : resultList) {
+		//	p.setItemSize(p.getItem().getSize());
+		//	p.setItemColor(p.getItem().getColor());
 		}
 		return resultList;
 	}
@@ -291,7 +262,7 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 	}
 
 	@Override
-	public List<ECPurchaseRequest> memberCompletedList(ECMember user, List<OrderCriteria> orderCriteria,
+	public List<ECOrder> memberCompletedList(ECMember user, List<OrderCriteria> orderCriteria,
 			SearchCriteria searchCriteria, Integer listStart, Integer listLimit) throws Exception {
 		String HQLQuery = "SELECT DISTINCT r FROM ECPurchaseRequest AS r WHERE (r.declined=true OR r.approved=true) AND r.requester.id = :id";
 		if (searchCriteria != null && searchCriteria.getSearchValue() != null && !"".equals(searchCriteria.getSearchValue()) 
@@ -319,11 +290,11 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 			query.setMaxResults(listLimit);
 		}
 		@SuppressWarnings("unchecked")
-		List<ECPurchaseRequest> resultList = query.getResultList();
+		List<ECOrder> resultList = query.getResultList();
 		// add size and color
-		for (ECPurchaseRequest p : resultList) {
-			p.setItemSize(p.getItem().getSize());
-			p.setItemColor(p.getItem().getColor());
+		for (ECOrder p : resultList) {
+		//	p.setItemSize(p.getItem().getSize());
+		//	p.setItemColor(p.getItem().getColor());
 		}
 		return resultList;
 	}
@@ -343,7 +314,7 @@ public class ECPurchaseDaoImpl implements ECPurchaseDao {
 	}
 	
 	@Override
-	public List<String> processPurchaseRequest(ECPurchaseRequest[] purchaseRequests,RestResponse response, ECMember user) throws Exception {
+	public List<String> processPurchaseRequest(ECOrder[] purchaseRequests,RestResponse response, ECMember user) throws Exception {
 		List<String> items = new ArrayList<String>();
 	/*	for(PurchaseRequest purchaseRequest:purchaseRequests) {
 			long cartItemId = Long.valueOf((long)purchaseRequest.getId());
